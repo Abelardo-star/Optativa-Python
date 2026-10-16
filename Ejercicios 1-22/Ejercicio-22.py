@@ -102,9 +102,9 @@ def leer_entero(mensaje, minimo, maximo):
 def dar_de_alta_venta():
     print("Marcas disponibles:", ", ".join(MARCAS_MODELOS))
     while True:
-        entrada = input("Introduce la marca: ").strip().casefold()
+        entrada = input("Introduce la marca: ").strip().lower()
         marca = next(
-            (nombre for nombre in MARCAS_MODELOS if nombre.casefold() == entrada),
+            (nombre for nombre in MARCAS_MODELOS if nombre.lower() == entrada),
             None,
         )
         if marca:
@@ -114,9 +114,9 @@ def dar_de_alta_venta():
     modelos = MARCAS_MODELOS[marca]
     print(f"Modelos disponibles para {marca}:", ", ".join(modelos))
     while True:
-        entrada = input("Introduce el modelo: ").strip().casefold()
+        entrada = input("Introduce el modelo: ").strip().lower()
         modelo = next(
-            (nombre for nombre in modelos if nombre.casefold() == entrada),
+            (nombre for nombre in modelos if nombre.lower() == entrada),
             None,
         )
         if modelo:
