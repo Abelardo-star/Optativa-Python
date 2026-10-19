@@ -99,10 +99,19 @@ def leer_entero(mensaje, minimo, maximo):
         print(f"Error: el valor debe estar entre {minimo} y {maximo}.")
 
 
+def leer_texto(mensaje):
+    entrada = input(mensaje)
+    while entrada[:1] == " ":
+        entrada = entrada[1:]
+    while entrada[-1:] == " ":
+        entrada = entrada[:-1]
+    return entrada
+
+
 def dar_de_alta_venta():
     print("Marcas disponibles:", ", ".join(MARCAS_MODELOS))
     while True:
-        entrada = input("Introduce la marca: ").strip().lower()
+        entrada = leer_texto("Introduce la marca: ").lower()
         marca = next(
             (nombre for nombre in MARCAS_MODELOS if nombre.lower() == entrada),
             None,
@@ -114,7 +123,7 @@ def dar_de_alta_venta():
     modelos = MARCAS_MODELOS[marca]
     print(f"Modelos disponibles para {marca}:", ", ".join(modelos))
     while True:
-        entrada = input("Introduce el modelo: ").strip().lower()
+        entrada = leer_texto("Introduce el modelo: ").lower()
         modelo = next(
             (nombre for nombre in modelos if nombre.lower() == entrada),
             None,
@@ -136,7 +145,7 @@ def generar_resumen(indices):
     resumen = {}
     for marca, modelo, anio_venta, _, precio in ventas:
         campos = [marca, modelo, anio_venta]
-        clave = "_".join(str(campos[indice]) for indice in indices)
+        clave = "_".join(f"{campos[indice]}" for indice in indices)
         if clave not in resumen:
             resumen[clave] = [0, 0]
         resumen[clave][0] += 1
@@ -150,7 +159,7 @@ def mostrar_resumen(indices, titulo):
     encabezados += ["Unidades", "Importe total"]
     filas = [
         clave.split("_") + [
-            str(datos[0]),
+            f"{datos[0]}",
             f"{datos[1]:,}".replace(",", ".") + " €",
         ]
         for clave, datos in resumen.items()
@@ -162,9 +171,9 @@ def mostrar_resumen(indices, titulo):
 
     def formato_fila(valores):
         return " | ".join(
-            valor.ljust(anchos[columna])
+            f"{valor:<{anchos[columna]}}"
             if columna < len(indices)
-            else valor.rjust(anchos[columna])
+            else f"{valor:>{anchos[columna]}}"
             for columna, valor in enumerate(valores)
         )
 
@@ -179,7 +188,7 @@ def mostrar_resumen(indices, titulo):
     total_euros = sum(datos[1] for datos in resumen.values())
     print(separador)
     total = ["TOTAL"] + [""] * (len(indices) - 1)
-    total += [str(total_unidades), f"{total_euros:,}".replace(",", ".") + " €"]
+    total += [f"{total_unidades}", f"{total_euros:,}".replace(",", ".") + " €"]
     print(formato_fila(total))
 
 
@@ -196,7 +205,7 @@ def mostrar_menu():
 
 while True:
     mostrar_menu()
-    opcion = input("Selecciona una opción: ").strip()
+    opcion = leer_texto("Selecciona una opción: ")
     if opcion == "1":
         dar_de_alta_venta()
     elif opcion == "2":
