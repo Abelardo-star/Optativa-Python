@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 nombre_archivo = "Ej 27 Pandas 1.xlsx"
